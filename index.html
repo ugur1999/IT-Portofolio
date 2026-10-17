@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#080d12" />
+  <meta name="description" content="Uğur Erdas – technischer Quereinsteiger auf dem Weg in die IT. Interaktive Bewerbung mit einem Binär-/Hexadezimal-Konverter und einem 8-Bit-Experiment." />
+  <title>Uğur Erdas — IT in progress.</title>
+  <style>
+    :root { --bg:#090d12; --surface:#111923; --surface2:#141e29; --border:#283542; --text:#eef4f4; --muted:#9daeb7; --accent:#baf87d; --blue:#78c9eb; --line:#24313b; --shadow:rgba(0,0,0,.25); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; -webkit-font-smoothing:antialiased; }
+    body:before { content:""; position:absolute; top:0; right:0; width:70%; height:680px; pointer-events:none; background:radial-gradient(ellipse at 75% 21%,rgba(69,113,139,.17),transparent 51%),radial-gradient(ellipse at 80% 80%,rgba(93,152,75,.055),transparent 63%); z-index:-1; }
+    a { color:inherit; text-decoration:none; }
+    button,input { font:inherit; }
+    button { cursor:pointer; }
+    button:focus-visible,input:focus-visible,a:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
+    .container { max-width:1180px; padding:0 32px; margin:0 auto; }
+    .nav { height:84px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(196,221,226,.1); }
+    .brand { font-size:23px; font-weight:860; letter-spacing:-1.3px; display:inline-flex; align-items:center; gap:12px; }
+    .brand-mark { display:inline-flex; width:35px; height:35px; background:var(--accent); color:#0b120a; align-items:center; justify-content:center; border-radius:9px; font-weight:900; font-size:17px; letter-spacing:-1px; transform:rotate(-5deg); }
+    .brand em { color:var(--accent); font-style:normal; }
+    .navlinks { display:flex; align-items:center; gap:28px; font-size:13px; font-weight:650; color:#a9b6be; }
+    .navlinks a:hover { color:var(--accent); }
+    .nav-cta { border:1px solid #4e6b50; color:var(--accent); padding:11px 16px; border-radius:10px; }
+    .hero { display:grid; grid-template-columns:1.07fr .93fr; min-height:605px; gap:50px; align-items:center; padding-top:65px; padding-bottom:76px; }
+    .eyebrow { font:700 11px/1.4 ui-monospace,Consolas,monospace; letter-spacing:2.1px; text-transform:uppercase; color:var(--accent); }
+    .eyebrow::before { content:""; display:inline-block; width:7px; height:7px; border-radius:99px; background:var(--accent); box-shadow:0 0 15px rgba(186,248,125,.7); margin-right:10px; vertical-align:2px; }
+    h1 { font-size:clamp(50px,5.3vw,79px); letter-spacing:-5.1px; line-height:1.05; margin:29px 0 22px; font-weight:850; }
+    h1 .accent-text { color:var(--accent); }
+    .hero-lead { max-width:530px; line-height:1.8; font-size:17px; color:#b6c4cb; margin:0 0 29px; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:31px; }
+    .btn { border:1px solid transparent; display:inline-flex; align-items:center; justify-content:center; gap:11px; padding:15px 19px; font-size:13px; font-weight:750; border-radius:11px; transition:transform .18s,background .18s; }
+    .btn:hover { transform:translateY(-2px); }
+    .btn-primary { background:var(--accent); color:#0a130a; }
+    .btn-secondary { background:#1a2631; color:#e9f4f3; border-color:#344453; }
+    .chips { display:flex; flex-wrap:wrap; gap:9px; }
+    .chip { font-size:11px; color:#a9bac2; border:1px solid #32424c; background:#141d25; padding:8px 11px; border-radius:100px; }
+    .terminal-card { background:linear-gradient(150deg,#1b2632 0%,#111923 65%,#101820 100%); border:1px solid #3a4d56; box-shadow:0 28px 80px var(--shadow),0 0 1px #bbc8b9 inset; border-radius:17px; overflow:hidden; transform:rotate(1.35deg); }
+    .terminal-top { background:#22303a; border-bottom:1px solid #34444f; padding:13px 17px; display:flex; align-items:center; gap:8px; color:#bdc9ce; font:12px ui-monospace,monospace; }
+    .dot { width:9px; height:9px; border-radius:50%; background:#f17876; } .dot:nth-child(2){background:#eecb6d} .dot:nth-child(3){background:#7dc98c}
+    .terminal-title { flex:1; text-align:center; margin-right:40px; }
+    .term-body { padding:24px; font:13px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace; color:#d0dedb; min-height:322px; }
+    .term-line { margin-bottom:9px; word-break:break-word; }
+    .prompt { color:var(--accent); }
+    .term-soft { color:#91a4ae; }
+    .term-blue { color:#8ed7f3; }
+    .term-command { color:#e6f2f2; }
+    .term-output { white-space:pre-line; }
+    .term-input-wrap { display:flex; gap:9px; margin-top:8px; align-items:center; }
+    .term-input { min-width:0; flex:1; border:0; outline:0; background:transparent; color:#eef5f2; font:inherit; }
+    .term-buttons { display:flex; gap:7px; flex-wrap:wrap; padding-top:13px; }
+    .term-quick { background:#263540; color:#b9d0d4; border:1px solid #3a5360; border-radius:7px; font:11px ui-monospace,monospace; padding:7px 9px; }
+    .term-quick:hover { border-color:var(--accent); color:var(--accent); }
+    .proof { border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:#0e141b; }
+    .proof-inner { min-height:106px; display:flex; gap:25px; align-items:center; justify-content:space-between; }
+    .proof-copy { color:#94a4af; font-size:14px; line-height:1.7; }
+    .proof-copy strong { color:var(--text); }
+    .proof-right { display:flex; align-items:center; gap:13px; font-size:12px; white-space:nowrap; color:var(--accent); font-weight:650; }
+    .status-dot { width:9px; height:9px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 5px rgba(186,248,125,.08); }
+    section.content { padding-top:110px; padding-bottom:100px; }
+    .section-heading { max-width:720px; margin-bottom:33px; }
+    h2 { font-size:clamp(30px,3.6vw,49px); line-height:1.13; letter-spacing:-2px; margin:14px 0 15px; font-weight:820; }
+    .section-desc { font-size:15px; line-height:1.75; color:#a8b9c2; max-width:690px; }
+    .skills-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+    .skill-card { background:#111922; border:1px solid #293744; border-radius:16px; padding:27px; min-height:245px; transition:border-color .2s,transform .2s; }
+    .skill-card:hover { border-color:#77936e; transform:translateY(-3px); }
+    .card-no { font:12px ui-monospace,Consolas,monospace; color:var(--accent); margin-bottom:42px; }
+    h3 { margin:0 0 11px; font-size:19px; letter-spacing:-.5px; }
+    .card-copy { font-size:13.5px; color:#a0b2bd; line-height:1.8; margin:0; }
+    .callout { padding:18px 22px; border-left:2px solid var(--accent); background:#121d23; border-radius:0 10px 10px 0; color:#bbc7cb; font-size:14px; line-height:1.7; margin-top:20px; }
+    .callout strong { color:#eaf1f1; }
+    .lab-section { padding:100px 0 106px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:#0f161d; position:relative; }
+    .lab-section:before { content:""; position:absolute; right:2%; top:0; width:500px; height:500px; pointer-events:none; background:radial-gradient(circle,rgba(65,140,130,.065),transparent 65%); }
+    .lab-header { display:flex; justify-content:space-between; gap:25px; align-items:end; margin-bottom:27px; }
+    .lab-header .section-heading { margin-bottom:0; }
+    .lab-stamp { padding:10px 12px; border:1px solid #526c4a; color:var(--accent); background:#1b281e; border-radius:100px; font:11px ui-monospace,monospace; letter-spacing:.4px; white-space:nowrap; }
+    .lab { display:grid; grid-template-columns:1fr 1.2fr; gap:0; border:1px solid #3c4b55; background:#111c26; border-radius:17px; overflow:hidden; }
+    .lab-controls { padding:28px; border-right:1px solid #344651; }
+    .lab-output { padding:28px; background:linear-gradient(150deg,#162430,#0e1922); }
+    .mini-tag { font:700 11px ui-monospace,monospace; color:#8cc4d8; letter-spacing:1.2px; }
+    .lab h3 { margin:12px 0 10px; font-size:22px; }
+    .lab p { margin:0 0 22px; color:#9fb2bc; font-size:13px; line-height:1.8; }
+    .field-label { display:block; color:#c8d4d9; font-size:12px; font-weight:650; margin:15px 0 8px; }
+    .field { width:100%; background:#09121a; border:1px solid #3b505c; border-radius:10px; padding:13px 14px; color:#eef6f4; outline:0; font:15px ui-monospace,monospace; }
+    .field:focus { border-color:var(--accent); }
+    .field-row { display:grid; grid-template-columns:1fr 106px; gap:10px; }
+    .field-row .field-label { margin-top:0; }
+    .lab-run { width:100%; margin-top:16px; }
+    .sample { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:15px; color:#8ca2b0; font-size:11px; }
+    .sample button { color:#bddfca; font:11px ui-monospace,monospace; padding:6px 8px; background:#1c2b32; border:1px solid #36504f; border-radius:7px; }
+    .result-head { display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #354650; padding-bottom:17px; margin-bottom:13px; }
+    .live { color:var(--accent); font:12px ui-monospace,monospace; }
+    .result-row { display:flex; justify-content:space-between; gap:14px; padding:10px 0; border-bottom:1px solid rgba(178,213,219,.09); font-size:13px; }
+    .result-row span:first-child { color:#98aeb9; }
+    .result-row strong { font:600 13px ui-monospace,Consolas,monospace; color:#e1f0ee; text-align:right; overflow-wrap:anywhere; }
+    .result-note { min-height:19px; color:#9dbac0; font-size:12px; line-height:1.6; margin-top:15px; }
+    .result-note.error { color:#ffabab; }
+
+    /* Byte Lab: Bits als echte, tastaturbedienbare Buttons */
+    .bit-lab { margin-top:21px; border-top:1px solid #354650; padding-top:18px; }
+    .bit-label { color:#afc4ca; font-size:12px; margin:0 0 11px; line-height:1.55; }
+    .bits-grid { display:grid; grid-template-columns:repeat(8,minmax(0,1fr)); gap:6px; }
+    .bit { min-width:0; padding:11px 1px 10px; background:#10222a; border:1px solid #36515a; border-radius:9px; display:flex; flex-direction:column; align-items:center; gap:7px; color:#78919e; transition:background .12s,border-color .12s,transform .12s; }
+    .bit:hover { transform:translateY(-2px); border-color:#75956a; }
+    .bit[aria-pressed="true"] { background:#243d2d; border-color:#8abb78; color:var(--accent); }
+    .bit-weight { color:#91a6b2; font:10px ui-monospace,Consolas,monospace; }
+    .bit[aria-pressed="true"] .bit-weight { color:#c1dcaf; }
+    .bit-state { font:750 20px ui-monospace,Consolas,monospace; line-height:1.1; }
+    .bit-nibble:nth-child(4) { margin-right:5px; }
+    .bit-nibble:nth-child(5) { margin-left:5px; }
+    .explain { color:#b2c5cc; font:12px/1.75 ui-monospace,Consolas,monospace; margin-top:17px; min-height:54px; }
+    .explain strong { color:var(--accent); font-weight:650; }
+    .field-select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23c8d4d9' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-position:right 13px center; background-repeat:no-repeat; padding-right:39px; }
+    .form-hint { margin-top:11px!important; margin-bottom:0!important; font-size:11px!important; color:#91aab3!important; }
+    /* Das Ergebnis ist auch auf dem Smartphone unmittelbar unter der Schaltfläche sichtbar. */
+    .quick-result { margin-top:13px; padding:13px 14px; background:#15272b; color:#bed7dc; border:1px solid #3a5356; border-radius:10px; font:12px/1.7 ui-monospace,Consolas,monospace; min-height:48px; overflow-wrap:anywhere; }
+    .quick-result strong { color:var(--accent); }
+    .quick-result.is-error { color:#ffc4ba; background:#2b1c21; border-color:#a75555; }
+    .quick-result.is-success { background:#1b3028; border-color:#60865b; color:#d0e8d7; }
+    .quick-result.flash { animation:result-glow .42s ease-out; }
+    @keyframes result-glow { from { box-shadow:0 0 0 4px rgba(186,248,125,.22); } to { box-shadow:0 0 0 0 rgba(186,248,125,0); } }
+    @media (max-width:390px) { .bits-grid{gap:3px}.bit{padding:9px 0}.bit-state{font-size:17px}.bit-weight{font-size:9px} }
+    .story { display:grid; grid-template-columns:.86fr 1.14fr; gap:95px; align-items:start; }
+    .story-quote { font-size:clamp(26px,3.1vw,39px); line-height:1.35; letter-spacing:-1.5px; font-weight:680; margin:20px 0; }
+    .story-quote b { color:var(--accent); font-weight:inherit; }
+    .story-card { border-left:1px solid #415058; padding-left:32px; }
+    .timeline { display:grid; grid-template-columns:100px 1fr; gap:15px; padding:23px 0; border-bottom:1px solid #25353f; }
+    .timeline:first-child { border-top:1px solid #25353f; }
+    .timeline-year { color:var(--accent); font:12px ui-monospace,monospace; padding-top:3px; }
+    .timeline-title { font-weight:740; font-size:16px; margin-bottom:6px; }
+    .timeline-desc { color:#9dabb5; line-height:1.7; font-size:13px; }
+    .contact { background:#baf87d; color:#102015; padding:72px 0 62px; }
+    .contact-inner { display:flex; align-items:end; justify-content:space-between; gap:35px; }
+    .contact .eyebrow { color:#34542b; }
+    .contact .eyebrow:before { background:#34542b; box-shadow:none; }
+    .contact h2 { font-size:clamp(36px,5vw,64px); letter-spacing:-3px; max-width:670px; margin-bottom:15px; }
+    .contact p { max-width:670px; line-height:1.7; color:#405644; font-size:15px; }
+    .contact-btn { border-radius:12px; padding:16px 23px; white-space:nowrap; background:#101e16; color:#d9ffbf; font-weight:760; font-size:14px; border:0; }
+    .contact-btn:hover { background:#25442d; }
+    footer { padding:25px 0 30px; background:#0d141a; color:#8497a3; }
+    .footer-inner { display:flex; justify-content:space-between; gap:20px; font-size:12px; line-height:1.7; }
+    .toast { position:fixed; bottom:20px; left:50%; transform:translate(-50%,110px); background:#e8f7e8; color:#112016; padding:13px 17px; border-radius:10px; font-size:12px; font-weight:700; box-shadow:0 15px 55px rgba(0,0,0,.4); transition:transform .25s,opacity .25s,visibility .25s; opacity:0; visibility:hidden; z-index:10; }
+    .toast.show { transform:translate(-50%,0); opacity:1; visibility:visible; }
+    @media (max-width:970px) { .hero{grid-template-columns:1fr;gap:40px;padding-top:55px;padding-bottom:70px;}.hero h1{font-size:clamp(50px,9vw,82px);} .terminal-card{max-width:650px;transform:none;} .story{gap:45px;} }
+    @media (max-width:690px) { .container{padding:0 20px;}.nav{height:69px;}.brand{font-size:19px}.navlinks{gap:15px}.navlinks a:not(.nav-cta){display:none}.nav-cta{font-size:12px;padding:9px 11px}.hero{min-height:0;padding-top:48px;padding-bottom:60px;gap:39px}.eyebrow{letter-spacing:1.3px;font-size:10px;}h1{font-size:clamp(47px,12vw,67px)!important;letter-spacing:-3.5px;margin:19px 0 18px;} .hero-lead{font-size:15px;line-height:1.7;}.hero-actions{margin-bottom:24px}.btn{padding:13px 15px}.terminal-top{font-size:10px}.term-body{padding:19px;font-size:11.6px;min-height:295px}.proof-inner{min-height:0;padding:23px 20px;align-items:start;flex-direction:column;gap:11px}.proof-copy{font-size:13px}.proof-right{font-size:11px} section.content{padding-top:68px;padding-bottom:75px}h2{letter-spacing:-1.5px}.skills-grid{grid-template-columns:1fr;gap:12px}.skill-card{min-height:0;padding:22px}.card-no{margin-bottom:21px}.lab-section{padding:72px 0}.lab-header{flex-direction:column;align-items:start;gap:13px}.lab{grid-template-columns:1fr}.lab-controls{border-right:0;border-bottom:1px solid #344651;padding:22px}.lab-output{padding:22px}.story{grid-template-columns:1fr;gap:17px}.story-card{padding-left:19px}.timeline{grid-template-columns:85px 1fr}.contact{padding:60px 0}.contact-inner{align-items:start;flex-direction:column;gap:15px}.contact h2{letter-spacing:-2px}.footer-inner{flex-direction:column;gap:4px} }
+    @media (prefers-reduced-motion:reduce) { html{scroll-behavior:auto} *,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important} }
+  </style>
+</head>
+<body>
+  <header class="container">
+    <nav class="nav" aria-label="Hauptnavigation">
+      <a class="brand" href="#start" aria-label="Uğur Erdas – Startseite"><span class="brand-mark">U.</span> UĞUR<em>ERDAS</em></a>
+      <div class="navlinks"><a href="#profil">Über mich</a><a href="#projekt">Live-Projekt</a><a href="#weg">Mein Weg</a><a class="nav-cta" href="#kontakt">Kontakt ↗</a></div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero container" id="start" aria-labelledby="hero-title">
+      <div>
+        <div class="eyebrow">TECHNISCHER QUEREINSTEIGER // HANNOVER</div>
+        <h1 id="hero-title">Technik im Kopf.<br /><span class="accent-text">IT im Fokus.</span></h1>
+        <p class="hero-lead">Hi, ich bin Uğur. Gelernter Elektroniker für Automatisierungstechnik, Wirtschaftsinformatikstudent und neugierig auf alles, was IT-Systeme am Laufen hält. Diese Seite ist mein kleines Experiment: <strong style="color:#edf8e9">nicht nur bewerben, sondern machen.</strong></p>
+        <div class="hero-actions"><a class="btn btn-primary" href="#projekt">Mein Projekt testen <span aria-hidden="true">↗</span></a><a class="btn btn-secondary" href="#profil">Wer ich bin <span aria-hidden="true">↓</span></a></div>
+        <div class="chips"><span class="chip">⚙ Automatisierungstechnik</span><span class="chip">⌘ B.Sc. Wirtschaftsinformatik</span><span class="chip">↗ IT-Einstieg</span></div>
+      </div>
+      <div class="terminal-card" aria-label="Interaktives Bewerbungsterminal">
+        <div class="terminal-top"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="terminal-title">ugur@next-step: ~</span></div>
+        <div class="term-body">
+          <div class="term-line"><span class="prompt">ugur@next-step</span><span class="term-soft">:~$</span> <span class="term-command">whoami</span></div>
+          <div class="term-line term-output">Uğur Erdas<br><span class="term-blue">Elektroniker → Wirtschaftsinformatik → IT</span><br><span class="term-soft">Status: neugierig, lernbereit, am Machen.</span></div>
+          <div class="term-line"><span class="prompt">ugur@next-step</span><span class="term-soft">:~$</span> <span class="term-command">cat motivation.txt</span></div>
+          <div class="term-line term-output">"Ich muss nicht schon alles wissen. Aber ich will verstehen, wie es funktioniert."</div>
+          <div id="terminal-history" aria-live="polite"></div>
+          <form class="term-input-wrap" id="terminal-form" autocomplete="off"><label class="prompt" for="terminal-input">➜</label><input id="terminal-input" class="term-input" type="text" maxlength="36" spellcheck="false" aria-label="Terminal-Befehl eingeben" placeholder="help eingeben ..." /><button type="submit" aria-label="Befehl ausführen" class="term-quick">↵</button></form>
+          <div class="term-buttons" aria-label="Terminal-Schnellbefehle"><button class="term-quick" type="button" data-command="help">help</button><button class="term-quick" type="button" data-command="skills">skills</button><button class="term-quick" type="button" data-command="learning">learning</button><button class="term-quick" type="button" data-command="converter">converter</button><button class="term-quick" type="button" data-command="coffee">coffee</button></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="proof"><div class="container proof-inner"><div class="proof-copy"><strong>Keine zehn Jahre Administrationserfahrung.</strong> Dafür eine technische Ausbildung, echte Neugier und die Bereitschaft, bei den Grundlagen anzufangen.</div><div class="proof-right"><span class="status-dot"></span> OFFEN FÜR DEN IT-EINSTIEG</div></div></div>
+
+    <section class="content container" id="profil" aria-labelledby="profil-title">
+      <div class="section-heading"><span class="eyebrow">01 / WAS ICH MITBRINGE</span><h2 id="profil-title">Nicht bei null. Aber bereit, Neues zu lernen.</h2><div class="section-desc">Mein bisheriger Weg war technisch, organisatorisch und kreativ. Jetzt möchte ich diese Perspektiven im IT-Alltag zusammenbringen.</div></div>
+      <div class="skills-grid">
+        <article class="skill-card"><div class="card-no">01 // TECHNIK</div><h3>Systematisch denken.</h3><p class="card-copy">Abgeschlossene Ausbildung zum Elektroniker für Automatisierungstechnik bei Volkswagen. Grundlagen in Digitaltechnik, Binär- und Hexadezimalsystemen, Netzwerktechnik, TIA Portal und technischen Systemzusammenhängen.</p></article>
+        <article class="skill-card"><div class="card-no">02 // DIGITAL</div><h3>Einfach ausprobieren.</h3><p class="card-copy">Erfahrung mit der Einrichtung von Windows-PCs, Computerhardware sowie digitalen Anwendungen. Dazu eigene Projekte rund um Präsentationsdesign, Audio und Video.</p></article>
+        <article class="skill-card"><div class="card-no">03 // MENSCHEN</div><h3>Verständlich kommunizieren.</h3><p class="card-copy">Durch meine Tätigkeit in der Jugend- und Auszubildendenvertretung habe ich Austausch, Organisation, Moderation und Zusammenarbeit mit unterschiedlichen Ansprechpartnern erlebt.</p></article>
+      </div>
+      <div class="callout"><strong>Mein Anspruch:</strong> Ich bewerbe mich nicht mit Fähigkeiten, die ich noch nicht habe. Sondern mit einer soliden technischen Basis, Lernbereitschaft und dem Wunsch, das Gelernte praktisch einzusetzen.</div>
+    </section>
+
+    <section class="lab-section" id="projekt" aria-labelledby="projekt-title"><div class="container">
+      <div class="lab-header"><div class="section-heading"><span class="eyebrow">02 / KLEINES PROJEKT. ECHTE FUNKTION.</span><h2 id="projekt-title">Von 0 und 1<br />zu A bis F.</h2><div class="section-desc">Binär- und Hexadezimalzahlen gehören zu den Grundlagen, die ich aus meiner technischen Ausbildung kenne. In diesem kleinen JavaScript-Projekt wird daraus etwas zum Ausprobieren: Zahl eingeben, umrechnen und einzelne Bits selbst schalten.</div></div><span class="lab-stamp">● LIVE IM BROWSER</span></div>
+      <div class="lab">
+        <div class="lab-controls"><div class="mini-tag">BYTE_LAB / 001</div><h3>8-Bit Zahlensystem-Konverter</h3><p>Eine Zahl, vier Darstellungen. Der Wertebereich umfasst ein Byte (0–255). Alle Berechnungen laufen lokal im Browser.</p>
+          <div id="convert-form" role="group" aria-label="Zahlensystem-Konverter">
+            <label class="field-label" for="number-base">Zahlensystem der Eingabe</label>
+            <select class="field field-select" id="number-base" aria-label="Zahlensystem wählen">
+              <option value="10">Dezimal (Basis 10)</option>
+              <option value="2">Binär (Basis 2)</option>
+              <option value="16">Hexadezimal (Basis 16)</option>
+            </select>
+            <label class="field-label" for="number-input">Dein Wert</label>
+            <input class="field" id="number-input" type="text" inputmode="text" value="42" maxlength="14" autocomplete="off" spellcheck="false" aria-describedby="value-hint" />
+            <p class="form-hint" id="value-hint">Beispiele: 42 dezimal, 00101010 binär oder 2A hexadezimal.</p>
+            <button class="btn btn-primary lab-run" id="convert-button" type="button">Jetzt Umrechnung starten <span aria-hidden="true">→</span></button>
+            <div class="quick-result" id="quick-result" role="status" aria-live="polite" aria-atomic="true">Wähle ein Zahlensystem, gib einen Wert ein und starte die Umrechnung.</div>
+          </div>
+          <div class="sample">Ausprobieren: <button type="button" data-value="42" data-base="10">42₁₀</button><button type="button" data-value="10101010" data-base="2">10101010₂</button><button type="button" data-value="FF" data-base="16">FF₁₆</button><button type="button" data-value="0" data-base="10">0₁₀</button></div>
+        </div>
+        <div class="lab-output" aria-live="polite"><div class="result-head"><span class="mini-tag">DEIN ERGEBNIS</span><span class="live" id="result-status">● BEREIT</span></div>
+          <div class="result-row"><span>Dezimal · Basis 10</span><strong id="out-dec">—</strong></div>
+          <div class="result-row"><span>Binär · Basis 2</span><strong id="out-bin">—</strong></div>
+          <div class="result-row"><span>Hexadezimal · Basis 16</span><strong id="out-hex">—</strong></div>
+          <div class="result-row"><span>Oktal · Basis 8</span><strong id="out-oct">—</strong></div>
+          <div class="bit-lab"><p class="bit-label">Klick die Bits an und sieh, wie sich die Zahl verändert. Die kleinen Zahlen zeigen die Wertigkeit jedes Bits.</p><div class="bits-grid" id="bits-grid" role="group" aria-label="Acht Bits umschalten"></div><div class="explain" id="explanation"></div></div>
+          <div id="result-note" class="result-note">Ein Byte besteht aus 8 Bits. Vier Bits entsprechen einer Hexadezimalstelle.</div>
+        </div>
+      </div>
+    </div></section>
+
+    <section class="content container story" id="weg" aria-labelledby="weg-title">
+      <div><span class="eyebrow">03 / MEIN WEG</span><h2 id="weg-title">Ein Richtungswechsel mit Plan.</h2><p class="story-quote">„Ich möchte nicht nur verstehen, <b>was</b> funktioniert. Sondern auch, <b>warum</b>.“</p><p class="section-desc">Ich suche ein Umfeld, in dem ich im IT-Support oder in einer Junior-Rolle praktisch wachsen kann – mit dem langfristigen Ziel, Verantwortung in der Systemadministration zu übernehmen.</p></div>
+      <div class="story-card"><div class="timeline"><div class="timeline-year">2021–2024</div><div><div class="timeline-title">Technische Ausbildung</div><div class="timeline-desc">Elektroniker für Automatisierungstechnik bei Volkswagen Nutzfahrzeuge; verkürzte Ausbildung.</div></div></div><div class="timeline"><div class="timeline-year">2022–2024</div><div><div class="timeline-title">Organisation & Verantwortung</div><div class="timeline-desc">Mitarbeit in der Jugend- und Auszubildendenvertretung – mit viel Kommunikation, Koordination und Teamarbeit.</div></div></div><div class="timeline"><div class="timeline-year">Seit 2024</div><div><div class="timeline-title">Berufspraxis bei Volkswagen</div><div class="timeline-desc">Tätigkeit in der Fahrzeugmontage. Parallel wächst mein Interesse an digitalen und IT-nahen Aufgaben.</div></div></div><div class="timeline"><div class="timeline-year">Seit 10/2026</div><div><div class="timeline-title">B.Sc. Wirtschaftsinformatik</div><div class="timeline-desc">Fernstudium an der IU Internationalen Hochschule. Nächster Schritt: Theorie und Berufspraxis in der IT verbinden.</div></div></div></div>
+    </section>
+
+    <section class="contact" id="kontakt" aria-labelledby="contact-title"><div class="container contact-inner"><div><span class="eyebrow">04 / LASS UNS SPRECHEN</span><h2 id="contact-title">Potenzial sieht man nicht nur im Lebenslauf.</h2><p>Vielleicht passe ich noch nicht auf jede Anforderung. Aber ich bringe Technikverständnis, Eigeninitiative und echtes Interesse mit. Ich freue mich über ein Kennenlernen und einen offenen Austausch über mögliche Einstiegsperspektiven. Antworten Sie mir gerne direkt auf meine Bewerbungs-E-Mail.</p></div><button class="contact-btn" id="copy-intro" type="button">Kurzprofil kopieren ↗</button></div></section>
+  </main>
+
+  <footer><div class="container footer-inner"><span>© <span id="year">2026</span> Uğur Erdas · Region Hannover · Made with curiosity.</span><span>Persönliches Lernprojekt · HTML / CSS / JavaScript · keine Cookies, kein Tracking.</span></div></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite">Kurzprofil kopiert!</div>
+  <script>
+    'use strict';
+
+    // Mini-Terminal: bewusst nur erlaubte lokale Befehle, kein echtes Betriebssystem-Terminal.
+    const historyEl = document.getElementById('terminal-history');
+    const terminalInput = document.getElementById('terminal-input');
+    const terminalForm = document.getElementById('terminal-form');
+    const commandOutputs = {
+      help: 'Befehle: help · about · skills · learning · coffee · converter · clear',
+      about: 'Uğur Erdas | Elektroniker | Wirtschaftsinformatikstudent | Region Hannover',
+      skills: 'Grundlagen: Digitaltechnik, Binär/Hex, Windows-Einrichtung, TIA Portal.\nPlus: Kommunikation, Teamarbeit und digitales Arbeiten.',
+      learning: 'Gerade lerne ich: HTML, CSS und JavaScript anhand dieses Byte-Labs.\nNächster Schritt: Windows Server und Active Directory.',
+      coffee: '☕ Kaffee hilft. Gute Dokumentation aber noch mehr.',
+      converter: '↓ Zum 8-Bit-Labor: Dezimal ↔ Binär ↔ Hexadezimal.'
+    };
+    function runCommand(raw) {
+      const cmd = String(raw).trim().toLowerCase();
+      if (!cmd) return;
+      if (cmd === 'clear') { historyEl.replaceChildren(); terminalInput.value = ''; return; }
+      const line = document.createElement('div');
+      line.className = 'term-line';
+      const command = document.createElement('span');
+      command.className = 'term-command';
+      command.textContent = '$ ' + cmd;
+      const output = document.createElement('div');
+      output.className = 'term-line term-output term-soft';
+      output.textContent = commandOutputs[cmd] || 'Befehl nicht gefunden. Probiere „help“.';
+      line.appendChild(command);
+      historyEl.append(line, output);
+      while (historyEl.children.length > 8) { historyEl.removeChild(historyEl.firstChild); }
+      terminalInput.value = '';
+      if (cmd === 'converter') document.getElementById('projekt').scrollIntoView({behavior:'smooth'});
+    }
+    terminalForm.addEventListener('submit', (event) => { event.preventDefault(); runCommand(terminalInput.value); });
+    document.querySelectorAll('[data-command]').forEach(el => el.addEventListener('click', () => runCommand(el.dataset.command)));
+
+    // Byte Lab: 8 Bits, also ganzzahlige Werte 0 bis 255.
+    // HTML/CSS/JS-Lernprojekt. Keine Daten werden an einen Server gesendet.
+    const baseEl = document.getElementById('number-base');
+    const valueEl = document.getElementById('number-input');
+    const resultStatus = document.getElementById('result-status');
+    const quickResult = document.getElementById('quick-result');
+    const resultNote = document.getElementById('result-note');
+    const explanation = document.getElementById('explanation');
+    const bitsGrid = document.getElementById('bits-grid');
+    const weights = [128, 64, 32, 16, 8, 4, 2, 1];
+    let currentByte = 42;
+
+    function parseByte(raw, base) {
+      const trimmed = String(raw).trim();
+      const normalized = base === 2 ? trimmed.replace(/[\s_]/g, '') : trimmed;
+      if (base === 10 && !/^\d+$/.test(normalized)) throw new Error('Bitte eine Dezimalzahl zwischen 0 und 255 eingeben.');
+      if (base === 2 && !/^[01]{1,8}$/.test(normalized)) throw new Error('Binärzahlen enthalten nur 0 und 1 (maximal 8 Bits).');
+      if (base === 16 && !/^(?:0x)?[0-9a-f]{1,2}$/i.test(normalized)) throw new Error('Hexadezimal: 0–9 und A–F (maximal zwei Stellen).');
+      const cleanHex = base === 16 ? normalized.replace(/^0x/i, '') : normalized;
+      const parsed = parseInt(cleanHex, base);
+      if (!Number.isInteger(parsed) || parsed < 0 || parsed > 255) throw new Error('Dieses 8-Bit-Labor arbeitet nur mit Werten von 0 bis 255.');
+      return parsed;
+    }
+
+    function formatInput(value, base) {
+      if (base === 2) return value.toString(2).padStart(8, '0');
+      if (base === 16) return value.toString(16).toUpperCase().padStart(2, '0');
+      return String(value);
+    }
+
+    // Jede Taste ist ein Bit: bei Klick wird genau dessen Wertigkeit umgeschaltet.
+    weights.forEach((weight, i) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'bit bit-nibble';
+      button.dataset.weight = String(weight);
+      button.setAttribute('aria-label', `Bit mit Wertigkeit ${weight} umschalten`);
+      button.innerHTML = `<span class="bit-weight">${weight}</span><span class="bit-state">0</span>`;
+      button.addEventListener('click', () => {
+        currentByte ^= weight; // XOR: aus 0 wird 1 und umgekehrt
+        valueEl.value = formatInput(currentByte, Number(baseEl.value));
+        convertNumber();
+      });
+      bitsGrid.appendChild(button);
+    });
+
+    // Die Bits entsprechen bereits beim Laden dem vorbelegten Beispielwert 42.
+    const initialBits = currentByte.toString(2).padStart(8, '0');
+    bitsGrid.querySelectorAll('.bit').forEach((button, i) => {
+      const isOn = initialBits[i] === '1';
+      button.setAttribute('aria-pressed', String(isOn));
+      button.querySelector('.bit-state').textContent = initialBits[i];
+    });
+
+    function renderByte(value) {
+      currentByte = value;
+      const bits = value.toString(2).padStart(8, '0');
+      const binaryGrouped = bits.slice(0, 4) + ' ' + bits.slice(4);
+      const hex = value.toString(16).toUpperCase().padStart(2, '0');
+      document.getElementById('out-dec').textContent = String(value);
+      document.getElementById('out-bin').textContent = binaryGrouped;
+      document.getElementById('out-hex').textContent = '0x' + hex;
+      document.getElementById('out-oct').textContent = value.toString(8);
+      bitsGrid.querySelectorAll('.bit').forEach((button, index) => {
+        const isOn = bits[index] === '1';
+        button.setAttribute('aria-pressed', String(isOn));
+        button.querySelector('.bit-state').textContent = bits[index];
+      });
+      const onBits = weights.filter(weight => (value & weight) !== 0);
+      const sum = onBits.length ? onBits.join(' + ') : '0';
+      // Vier Binärstellen ergeben jeweils eine Hexadezimalstelle.
+      const leftNibble = bits.slice(0, 4);
+      const rightNibble = bits.slice(4);
+      explanation.replaceChildren();
+      const step1 = document.createElement('div');
+      step1.textContent = `Dezimal: ${sum} = ${value}`;
+      const step2 = document.createElement('div');
+      step2.textContent = `Hex: ${leftNibble} → ${hex[0]}  |  ${rightNibble} → ${hex[1]}`;
+      explanation.append(step1, step2);
+      resultNote.textContent = '8 Bits = 1 Byte. Je 4 Bits (= 1 Nibble) ergeben eine Hexadezimalstelle.';
+      resultNote.classList.remove('error');
+      resultStatus.textContent = '● BERECHNET';
+    }
+
+    function convertNumber() {
+      // Keine Formular-Übermittlung: Ein Klick aktualisiert nur die Werte im Rechner.
+      const base = Number(baseEl.value);
+      const rawInput = valueEl.value.trim();
+      try {
+        const value = parseByte(rawInput, base);
+        renderByte(value);
+        valueEl.removeAttribute('aria-invalid');
+        const binary = value.toString(2).padStart(8, '0');
+        const hex = value.toString(16).toUpperCase().padStart(2, '0');
+        const sourceName = base === 2 ? 'Binär' : base === 16 ? 'Hexadezimal' : 'Dezimal';
+        quickResult.textContent = `✓ ${rawInput} (${sourceName}) → ${value}₁₀ · ${binary}₂ · ${hex}₁₆`;
+        quickResult.classList.remove('is-error');
+        quickResult.classList.add('is-success');
+        // Bei wiederholter Eingabe desselben Werts ist eine neue Berechnung sichtbar.
+        quickResult.classList.remove('flash');
+        void quickResult.offsetWidth;
+        quickResult.classList.add('flash');
+      } catch (error) {
+        resultStatus.textContent = '● EINGABE PRÜFEN';
+        resultNote.textContent = error.message;
+        resultNote.classList.add('error');
+        valueEl.setAttribute('aria-invalid', 'true');
+        quickResult.textContent = `✕ Keine Umrechnung: ${error.message}`;
+        quickResult.classList.remove('is-success', 'flash');
+        quickResult.classList.add('is-error');
+      }
+    }
+
+    // Klick und Enter-Taste führen genau dieselbe Berechnung aus – ohne Seitenwechsel.
+    document.getElementById('convert-button').addEventListener('click', convertNumber);
+    valueEl.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') { event.preventDefault(); convertNumber(); }
+    });
+    document.querySelectorAll('[data-value][data-base]').forEach(button => button.addEventListener('click', () => {
+      baseEl.value = button.dataset.base;
+      valueEl.value = button.dataset.value;
+      convertNumber();
+    }));
+    baseEl.addEventListener('change', () => {
+      // Beim Wechsel der Basis bleibt die zuletzt gültige Zahl erhalten.
+      valueEl.value = formatInput(currentByte, Number(baseEl.value));
+      // Für die neue Basis erscheint ein gültiger Wert im Feld; Berechnung auf Klick.
+      quickResult.textContent = 'Basis gewechselt. Klicke auf „Jetzt Umrechnung starten“, um den Wert umzurechnen.';
+      quickResult.classList.remove('is-success', 'is-error', 'flash');
+      valueEl.removeAttribute('aria-invalid');
+    });
+    // Beim ersten Laden bleibt die Ausgabe bewusst leer: der Button hat eine sichtbare Wirkung.
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Ohne Eingabe persönlicher Kontaktdaten: die Personalerin kann das Kurzprofil übernehmen.
+    let toastTimeout;
+    document.getElementById('copy-intro').addEventListener('click', async () => {
+      const text = 'Uğur Erdas – gelernter Elektroniker für Automatisierungstechnik bei Volkswagen Nutzfahrzeuge und seit Oktober 2026 B.Sc.-Student der Wirtschaftsinformatik. Ziel: praxisnaher Einstieg in IT-Support oder Junior-Systemadministration. Grundlagen: Digitaltechnik und Zahlensysteme, Netzwerktechnik, Windows-PC-Einrichtung, TIA Portal; Stärken: Teamarbeit, Kommunikation und technisches Denken.';
+      try {
+        if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(text);
+        else { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); if (!document.execCommand('copy')) throw Error('copy failed'); ta.remove(); }
+        const toast = document.getElementById('toast'); toast.classList.add('show'); clearTimeout(toastTimeout); toastTimeout = setTimeout(() => toast.classList.remove('show'), 2500);
+      } catch (err) { alert(text); }
+    });
+  </script>
+</body>
+</html>
